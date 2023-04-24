@@ -1,0 +1,270 @@
+<style>
+    .article {
+        width: 675px;
+        float: left;
+        padding-right: 40px;
+    }
+
+    .container-fluid {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .row {
+        margin-right: -15px;
+        margin-left: -15px;
+    }
+
+    .col-md-3 {
+        width: 25%;
+        float: left;
+    }
+
+    .col-md-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .col-md-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .img-thumbnail {
+        display: inline-block;
+        max-width: 100%;
+        height: auto;
+        padding: 4px;
+        line-height: 1.42857143;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        -webkit-transition: all .2s ease-in-out;
+        -o-transition: all .2s ease-in-out;
+        transition: all .2s ease-in-out;
+    }
+
+    .list-unstyled {
+        padding-left: 0;
+        list-style: none;
+    }
+
+    li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    blockquote {
+        padding: 10px 20px;
+        margin: 0 0 20px;
+        font-size: 17.5px;
+        border-left: 5px solid #eee;
+    }
+
+    textarea.form-control {
+        height: auto;
+    }
+
+    textarea {
+        overflow: auto;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 12px;
+        line-height: 1.5;
+        border-radius: 3px;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #337ab7;
+        border-color: #2e6da4;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+
+    body p {
+        font-family: 'sans-serif';
+    }
+
+    p {
+        display: block;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+    }
+
+    small {
+        display: block;
+        font-size: 80%;
+        line-height: 1.42857143;
+        color: #777;
+    }
+</style>
+{% block right-panel-content %}
+    <div class="article">
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-md-3 column">
+                    <img class="img-thumbnail music-image" alt="140x140" src="{{ book.imageURL }}"
+                         style="width: 140px"/>
+                </div>
+                <div class="col-md-6 column">
+                    <ol class="list-unstyled">
+                        <li>
+                            书籍名:{{ book.title }}
+                        </li>
+                        <li>
+                            作者: {{ book.author }}
+                        </li>
+                        <li>
+                            标签:
+                            {% if book.tags.all %}
+                                {% for tag in book.tags.all %}
+                                    {{ tag }}
+                                {% endfor %}
+                            {% else %}
+                                无
+                            {% endif %}
+                        </li>
+                        <li>
+                            网站评分:
+                            {% if book_rate %}
+                                {{ book_rate }}
+                            {% else %}
+                                无
+                            {% endif %}
+                        </li>
+                        {% if user_rate is not None %}
+                            <h4>您已经进行打分: {{ user_rate.mark }}</h4>
+                        {% else %}
+                            <li>
+                                <form action="{% url 'score' book.id %}" method="post">
+                                    {% csrf_token %}
+                                    <p>添加评分</p>
+                                    <select name="score">
+                                        <option>1.0</option>
+                                        <option>2.0</option>
+                                        <option>3.0</option>
+                                        <option>4.0</option>
+                                        <option>5.0</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-default">提交</button>
+                                </form>
+                            </li>
+
+                        {% endif %}
+                        <li>
+                            评分人数:{{ book.rate_set.count }}
+                        </li>
+                        <li>
+                            收藏人数:{{ book.collect.count }} ---{% if is_collect %}
+                            <a href="{% url 'decollect' book.id %}">取消收藏</a>{% else %}
+                            <a href="{% url 'collect' book.id %}">点击收藏</a>{% endif %}
+                        </li>
+                        <li>
+                            <div class="bdsharebuttonbox">
+                                <p>分享到:</p>
+                                <a href="#" class="bds_weixin" data-cmd="weixin"
+                                   title="分享到微信"></a><a href="#" class="bds_sqq"
+                                                             data-cmd="sqq"
+                                                             title="分享到QQ好友"></a><a href="#"
+                                                                                         class="bds_tsina"
+                                                                                         data-cmd="tsina"
+                                                                                         title="分享到新浪微博"></a><a
+                                    href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#"
+                                                                                                              class="bds_douban"
+                                                                                                              data-cmd="douban"
+                                                                                                              title="分享到豆瓣网"></a><a
+                                    href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a><a href="#"
+                                                                                                              class="bds_qzone"
+                                                                                                              data-cmd="qzone"
+                                                                                                              title="分享到QQ空间"></a>
+                            </div>
+                            <script>window._bd_share_config = {
+                                "common": {
+                                    "bdSnsKey": {},
+                                    "bdText": "",
+                                    "bdMini": "1",
+                                    "bdMiniList": false,
+                                    "bdPic": "",
+                                    "bdStyle": "1",
+                                    "bdSize": "24"
+                                }, "share": {}
+                            };
+                            with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];</script>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <form class="form" fole="form" action="{% url 'comment' book.id %}" method="post">
+                        {% csrf_token %}
+                        <textarea placeholder="快来说说点什么吧" class="form-control" name="comment" cols="10"
+                                  rows="5"></textarea>
+                        <button type="submit" class="btn btn-primary btn-lg btn-sm" style="float:right">提 交</button>
+                    </form>
+                    <p>评论:({{ book.comment_set.count }})</p>
+                    {% for i in comments %}
+                        <blockquote>
+                            <p>{{ i.user.name }}:</p>
+                            <p>{{ i.content }}
+                            </p>
+                            <small>{{ i.addtime }}-----------<a
+                                    href="{% url 'good' i.id book.id %}">点赞({{ i.good }})</a>
+                            </small>
+                        </blockquote>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

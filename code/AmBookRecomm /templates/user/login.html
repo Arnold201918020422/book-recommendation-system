@@ -1,0 +1,59 @@
+<head>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<script>
+    $(document).ready(function () {
+        // each 是 为每一个匹配的元素 执行定义的方法
+        $("#login_btn").click(function () {
+            userName = $("#username").val()
+            password = $("#password").val()
+            if (userName.length == 0) {
+                $("#username").focus();
+                return
+            }
+            if (password.length == 0) {
+                $("#password").focus();
+                return
+            }
+            params = JSON.stringify({
+                'username': userName,
+                'password': password
+            });
+
+            console.log("click ---> login params:" + params)
+            $.ajax({
+                url: {% url 'login' %},
+                type: 'post',
+                contentType: 'application/json; charset=UTF-8',
+                data: params,
+                // 上面data为提交数据，下面data形参指代的就是异步提交的返回结果data
+                success: function (data) {
+                    if (data.code == 200) {
+                        {#alert("登录成功");#}
+                        parent.location.reload();
+                        {#window.location.reload();#}
+                        {#location.reload();#}
+                    } else {
+                        alert("登录出错");
+                    }
+                }
+            });
+        });
+    });
+</script>
+<div>
+    <h2 align="center">用户登录</h2>
+    <div class="form-group">
+        <label for="Username">Username</label>
+        <input type="text" class="form-control" id="username" placeholder="username"
+               data-bv-notempty="true">
+        <small id="userHelp" class="form-text text-muted"></small>
+    </div>
+    <div class="form-group">
+        <label for="Password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2" id="login_btn">登录</button>
+</div>

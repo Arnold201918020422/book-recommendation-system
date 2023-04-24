@@ -1,0 +1,161 @@
+<style>
+    .article {
+        width: 675px;
+        float: left;
+        padding-right: 40px;
+    }
+
+    .indent {
+        word-break: normal;
+        word-wrap: break-word;
+    }
+
+    table {
+        border-collapse: collapse;
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .ul {
+        border-bottom: 1px dashed #DDDDDD;
+        line-height: 100%;
+        clear: both;
+    }
+
+    p {
+        display: block;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+    }
+
+    .rating_nums {
+        color: #e09015;
+        font-size: 12px;
+        padding: 0 3px;
+    }
+
+    .pl {
+        font: 12px Arial, Helvetica, sans-serif;
+        line-height: 150%;
+        color: #666666;
+    }
+
+    .paginator {
+        font: 14px Arial, Helvetica, sans-serif;
+        color: #aaa;
+        margin: 20px 0;
+        line-height: 150%;
+        text-align: center;
+    }
+
+    .prev {
+        margin-right: 20px;
+    }
+
+    .next {
+        margin-left: 20px;
+    }
+
+    .thispage {
+        color: #fff;
+        background: #83BF73;
+    }
+</style>
+{% block right-panel-content %}
+    <div class="article">
+        <div class="indent">
+            {% if not rateBooks %}
+                <h3 class="text-center">对不起没有书籍</h3>
+            {% else %}
+                <p class="ulfirst"></p>
+                <table>
+                    <tbody>
+                    <tr class="item">
+                        <td width="100" valign="top">
+                            <a class="nbg" href="#" onclick="moreurl(this,{i:'0'})">
+                                <img src="{{ rateBook1.imageURL |safe }}" width="90">
+                            </a>
+                        </td>
+                        <td valign="top">
+                            <div class="pl2">
+                                <a href="#" onclick="&quot;moreurl(this,{i:'0'})&quot;"
+                                   title="{{ rateBook1.title |safe }}"> {{ rateBook1.title |safe }}
+                                </a>
+                            </div>
+                            <p class="pl">{{ rateBook1.author | safe }} 著 / {{ rateBook1.brand | safe }}
+                                / {{ rateBook1.brand | safe }} </p>
+                            <div class="star clearfix">
+                                <span class="pl">收藏量 {{ rateBook1.num }}</span>
+                                <span class="rating_nums">浏览量 {{ rateBook1.collect.count }}</span>
+                                <span class="pl">评价量 {{ rateBook1.rate_set.count }}</span>
+                            </div>
+                            <p class="quote" style="margin: 10px 0; color: #666">
+                                <span class="inq">{{ rateBook1.description | safe }}</span>
+                            </p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                {% for book in rateBooks %}
+                    {% if forloop.first %}
+                    {% else %}
+                        <p class="ul"></p>
+                        <table>
+                            <tbody>
+                            <tr class="item">
+                                <td width="100" valign="top">
+                                    <a class="nbg" href="{% url 'book' book.id %}" onclick="moreurl(this,{i:'0'})">
+                                        <img src="{{ book.imageURL |safe }}" width="90">
+                                    </a>
+                                </td>
+                                <td valign="top">
+                                    <div class="pl2">
+                                        <a href="{% url 'book' book.id %}" onclick="&quot;moreurl(this,{i:'0'})&quot;"
+                                           title="{{ book.title |safe }}"> {{ book.title |safe }}
+                                        </a>
+                                    </div>
+                                    <p class="pl">{{ book.author | safe }} 著 / {{ book.brand | safe }}
+                                        / {{ book.brand | safe }}</p>
+                                    <div class="star clearfix">
+                                        <span class="pl">收藏量 {{ book.num }}</span>
+                                        <span class="rating_nums">浏览量 {{ book.collect.count }}</span>
+                                        <span class="pl">评价量 {{ book.rate_set.count }}</span>
+                                    </div>
+                                    <p class="quote" style="margin: 10px 0; color: #666">
+                                        <span class="inq">{{ book.description | safe }}</span>
+                                    </p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            <div class="paginator">
+                {% if rateBooks.has_previous %}
+                    <link rel="prev" href="#">
+                    <a href="{% url 'most_mark' %}?page={{ rateBooks.previous_page_number }}">&lt;前页</a>
+                {% else %}
+                    <span class="prev">&lt;前页</span>
+                {% endif %}
+                {% for p in ratePages %}
+                    {% if p == rateBooks.number %} <span class="thispage">{{ p }}</span>
+                    {% else %}
+                        <a href="{% url 'most_mark' %}?page={{ p }}">{{ p }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if rateBooks.has_next %}
+                    <span class="next">
+                            <link rel="next" href="#">
+                            <a href="{% url 'most_mark' %}?page={{ rateBooks.next_page_number }}">后页&gt;</a>
+                        </span>
+                {% else %}
+                    <span class="next">后页&gt;</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

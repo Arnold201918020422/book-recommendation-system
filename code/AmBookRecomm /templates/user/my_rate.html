@@ -1,0 +1,77 @@
+<style>
+    .article {
+        width: 1075px;
+        float: left;
+        padding-right: 40px;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    table {
+        border-collapse: collapse;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;
+    }
+
+    .table > thead:first-child > tr:first-child > th {
+        border-top: 0;
+    }
+
+    .table > thead > tr > th {
+        vertical-align: bottom;
+        border-bottom: 2px solid #ddd;
+    }
+
+    tr {
+        display: table-row;
+        vertical-align: inherit;
+        border-color: inherit;
+    }
+
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        padding: 8px;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: 1px solid #ddd;
+    }
+
+    th {
+        text-align: left;
+    }
+
+    a {
+        color: #337ab7;
+        text-decoration: none;
+    }
+</style>
+{% block right-panel-content %}
+    <div class="article">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>图书名</th>
+                <th>评分</th>
+                <th>时间</th>
+                <th>删除</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in rate %}
+                <tr>
+                    <td>{{ i.book.title }}</td>
+                    <td>{{ i.mark }}</td>
+                    <td>{{ i.create_time }}</td>
+                    <td><a href="{% url 'delete_rate' i.id %}">确定</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+

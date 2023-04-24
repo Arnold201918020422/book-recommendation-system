@@ -1,0 +1,130 @@
+<style>
+    .article {
+        width: 675px;
+        float: left;
+        padding-right: 40px;
+    }
+
+    .container-fluid {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: 700;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 12px;
+        line-height: 1.5;
+        border-radius: 3px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    table {
+        border-collapse: collapse;
+        border: none;
+        margin: 0;
+        background-color: transparent;
+        font-family: 'sans-serif';
+        font-size: 100%;
+        padding: 8px;
+        line-height: 1.42857143;
+        font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;
+    }
+
+    th {
+        text-align: left;
+    }
+
+    a {
+        color: #337ab7;
+        text-decoration: none;
+    }
+</style>
+{% block right-panel-content %}
+    <div class="article">
+        <div class="container-fluid">
+            <form action="{% url 'person' %}" method='post' autocomplete="on" class="form-inline">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field.errors }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <div>
+                    <button type="reset" class="btn btn-secondary btn-sm" style="float:left">重 置</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-sm" style="float:right">提 交</button>
+                </div>
+
+                <table class="table">
+                    <thead>
+                    <th><a href="{% url 'my_collect' %}">我的收藏</a></th>
+                    {#		<th><a href="{% url 'myjoin' %}">我的活动</a></th>#}
+                    <th><a href="{% url 'my_comments' %}">我的评论</a></th>
+                    <th><a href="{% url 'my_rate' %}">我的评分</a></th>
+                    </thead>
+                </table>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+

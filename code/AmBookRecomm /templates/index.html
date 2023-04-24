@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>图书推荐系统</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        html {
+        {#position: relative;#} min-height: 100%;
+            font-size: 13px;
+            color: #111;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            margin-bottom: 60px;
+        }
+
+        #wrapper {
+            width: 1340px;
+            margin: 0 auto;
+        }
+
+        .tab-content {
+            min-height: 420px;
+            margin: 0;
+            padding: 0;
+            height: 3540px;
+        }
+
+        iframe {
+            width: 1200px;
+            height: 3240px;
+            border: 0;
+        }
+
+        #footer {
+            padding-bottom: 10px;
+            color: #999;
+            margin-top: 40px;
+            overflow: hidden;
+            zoom: 1;
+            border-top: 1px dashed #ddd;
+        }
+
+        .fleft {
+            float: left;
+        }
+
+        .fright {
+            float: right;
+        }
+    </style>
+</head>
+<script>
+    $(document).ready(function () {
+        // each 是 为每一个匹配的元素 执行定义的方法
+        $("#tab").find("li").each(function () {
+            var a = $(this).find("a:first")[0];
+            console.log(a)
+            // location.pathname 获取 当前浏览器上的url 地址
+            if ($(a).attr("href") === location.pathname) {
+                $(this).addClass("active");
+            } else {
+                $(this).removeClass("active");
+            }
+        });
+    });
+</script>
+<body>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="navbar-brand disabled">Amazon书籍推荐系统</span>
+        </div>
+        <div>
+            <ul class="nav navbar-nav" id="tabs">
+                <li class="active"><a href="#all_books" data-toggle="tab">全部书籍</a></li>
+                <li><a href="#view_books" data-toggle="tab">浏览最多</a></li>
+                <li><a href="#rate_books" data-toggle="tab">评分最多</a></li>
+                <li><a href="#favor_books" data-toggle="tab">收藏最多</a></li>
+                <li><a href="#kind_books" data-toggle="tab">书籍分类</a></li>
+                <li><a href="#guess_your_like" data-toggle="tab">猜你喜欢</a></li>
+                {% if request.session.login_in == True %}
+                    <li><a href="#person" data-toggle="tab">我的信息</a></li>
+                    <li><a href="{% url 'logout' %}">退出</a></li>
+                {% else %}
+                    <li><a href="#login" data-toggle="tab">登录</a></li>
+                    <li><a href="#regist" data-toggle="tab">注册</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<div id="wrapper">
+    <div class="tab-content">
+        <div class="tab-pane active" id="all_books">
+            <iframe src="{% url 'all_books' %}"></iframe>
+        </div>
+        <div class="tab-pane" id="view_books">
+            <iframe src="{% url 'most_view' %}"></iframe>
+        </div>
+        <div class="tab-pane" id="rate_books">
+            <iframe src="{% url 'most_mark' %}"></iframe>
+        </div>
+        <div class="tab-pane" id="favor_books">
+            <iframe src="{% url 'hot_book' %}"></iframe>
+        </div>
+        <div class="tab-pane" id="kind_books">
+            <iframe src="{% url 'kindof' %}"></iframe>
+        </div>
+        <div class="tab-pane" id="guess_your_like">
+            {#            <iframe src="{% url 'login' %}"></iframe>#}
+            <iframe src="{% url 'recommend' %}"></iframe>
+        </div>
+        <div class="tab-pane" id="login">
+            <iframe src="{% url 'login' %}"></iframe>
+        </div>
+        <div class="tab-pane" id="regist">
+            <iframe src="{% url 'regist' %}" id="regFrame">
+            </iframe>
+        </div>
+        <div class="tab-pane" id="person">
+            <iframe src="{% url 'person' %}"></iframe>
+        </div>
+    </div>
+    <div id="footer">
+        <span id="icp" class="fleft gray-link">
+            © 2023－2025 ambook.com, all rights reserved AmBook科技有限公司
+        </span>
+        <a href="#" style="display: none;"></a>
+        <span class="fright">
+            <a href="#">关于AmBook</a>
+            · <a href="#">在AmBook工作</a>
+            · <a href="#">联系我们</a>
+            · <a href="#">法律声明</a>
+        </span>
+    </div>
+</div>
+{#<footer class="footer bg-light py-3">#}
+{#    <div class="container" style="margin-bottom: 1%">#}
+{#        <p class="text-center">copyright &copy; 2023</p>#}
+{#    </div>#}
+{#</footer>#}
+</body>
+</html>

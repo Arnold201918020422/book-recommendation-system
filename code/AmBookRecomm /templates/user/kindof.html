@@ -1,0 +1,78 @@
+{#{% block right-panel-content %}#}
+{#    {% for tag in tags %}#}
+{#            <div class="col-md-1" style="margin-top: 15px">#}
+{#      <a class="tags-input h2" href="{% url 'kind' tag.id %}"><span class="label label-primary">{{ tag.name }}</span> </a>#}
+{#                </div>#}
+{#    {% endfor %}#}
+{#{% endblock %}#}
+<style>
+    li {
+        display: inline-block;
+        font-size: 13px;
+    }
+</style>
+{% block right-panel-content %}
+    <div class="section-switcher" data-reactid=".0">
+        <div class="header" data-reactid=".0.0"
+             style="position: relative;font-size: 13px;background-color: white; border-bottom: 2px solid #02A682; position: relative;">
+            <span style="font-size: 17px;color: #222;margin-right: 1em;" data-reactid=".0.0.0"
+                  style="font: 12px Helvetica,Arial,sans-serif;line-height: 1.62;">图书分类</span>
+            <ul class="section-titles" style="display: inline-block;">
+                {% for tag in tags %}
+                    <li style="display: inline-block;font-size: 13px; font-weight: normal;">
+                        {% if forloop.first %}
+                        {% else %}
+                            |
+                        {% endif %}
+                        <a href="{% url 'kind' tag.id %}" style="color: #999;">{{ tag.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="content" style="padding: 15px 0px 15px 30px;">
+                <div class="album-content" style="margin-bottom: -15px;">
+                    {% for book in kindBooks %}
+                        <div class="album-item"
+                             style="width: 22%;display: inline-block;vertical-align: top;margin: 0;padding: 0;">
+                            <div class="inner" style="width: 135px;display: inline-block;text-align: left;"><a
+                                    href="{% url 'book' book.id %}" target="_blank">
+                                <div class="cover">
+                                    <img width="100%" src="{{ book.imageURL }}">
+                                </div>
+                            </a><a class="album-title" href="{% url 'book' book.id %}">Endless Summer Vacation</a>
+                                <p>Miley Cyrus</p>
+                                <div class="star clearfix">
+                                    <span class="allstarNaN"></span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <div class="paginator" style="margin: 20px 0;">
+                        {% if kindBooks.has_previous %}
+                            <link rel="prev" href="#">
+                            <a href="{{ path }}?page={{ musics.previous_page_number }}"
+                               style="padding: 0px 4px;margin: 2px;">&lt;前页</a>
+                        {% else %}
+                            <span class="prev">&lt;前页</span>
+                        {% endif %}
+                        {% for p in pages %}
+                            {% if p == kindBooks.number %} <span class="thispage">{{ p }}</span>
+                            {% else %}
+                                <a href="{{ path }}?page={{ p }}" style="padding: 0px 4px;margin: 2px;">{{ p }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        {% if kindBooks.has_next %}
+                            <span class="next">
+                            <link rel="next" href="#">
+                            <a href="{{ path }}?page={{ kindBooks.next_page_number }}"
+                               style="padding: 0px 4px;margin: 2px;">后页&gt;</a>
+                </span>
+                        {% else %}
+                            <span class="next" style="margin-left: 20px;">后页&gt;</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

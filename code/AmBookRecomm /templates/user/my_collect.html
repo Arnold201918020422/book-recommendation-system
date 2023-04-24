@@ -1,0 +1,84 @@
+<style>
+    .article {
+        width: 1075px;
+        float: left;
+        padding-right: 40px;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    table {
+        border-collapse: collapse;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;
+    }
+
+    .table > thead:first-child > tr:first-child > th {
+        border-top: 0;
+    }
+
+    .table > thead > tr > th {
+        vertical-align: bottom;
+        border-bottom: 2px solid #ddd;
+    }
+
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        padding: 8px;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: 1px solid #ddd;
+    }
+
+    tr {
+        display: table-row;
+        vertical-align: inherit;
+        border-color: inherit;
+    }
+
+    th {
+        text-align: left;
+    }
+
+    a {
+        color: #337ab7;
+        text-decoration: none;
+    }
+</style>
+{% block right-panel-content %}
+    <div class="article">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>图书</th>
+                <th>作者</th>
+                <th>标签</th>
+                <th>查看</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in books %}
+                <tr>
+                    <td>{{ i.title }}</td>
+                    <td>{{ i.brand }}</td>
+                    <td> {% if i.tags.all %}
+                        {% for tag in i.tags.all %}
+                            {{ tag }}
+                        {% endfor %}
+                    {% else %}
+                        无
+                    {% endif %}
+                    </td>
+                    <td><a href="{% url 'book' i.id %}">查看</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
